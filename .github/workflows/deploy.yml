@@ -11,22 +11,19 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
+      uses: actions/checkout@v2.3.4
       with:
-        node-version: '14'
+        persist-credentials: false
 
-    - name: Install dependencies
-      run: npm install
-
-    - name: Build project
-      run: npm run build
+    - name: Install And Build
+      run: |
+        npm install
+        npm run build
 
     - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
+      uses: JamesIves/github-pages-deploy-action@4.1.5
       with:
-        github_token: ${{ secrets.MK_NOTE }}
+        token: ${{ secrets.MK_NOTE }}
+        folder: dist
         branch: gh-pages
-        path: './dist'
+        repository-name: dingwanren/mk-note
