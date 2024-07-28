@@ -5,25 +5,28 @@ on:
     branches:
       - master  # Set this to your default branch
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2.3.4
-      with:
-        persist-credentials: false
-
-    - name: Install And Build
-      run: |
-        npm install
-        npm run build
-
-    - name: Deploy to GitHub Pages
-      uses: JamesIves/github-pages-deploy-action@4.1.5
-      with:
-        token: ${{ secrets.MK_NOTE }}
-        folder: dist
-        branch: gh-pages
-        repository-name: dingwanren/mk-note
+      - uses: actions/checkout@v4.1.7
+      - name: Install Node.js
+        uses: actions/setup-node@v4.0.3
+        with:
+          node-version: '14'  # Set this to the node version you are using
+      - name: Install Dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Upload entire repository
+          path: './dist' 
+      - name: Deploy
+        uses: actions/deploy-pages@v4
